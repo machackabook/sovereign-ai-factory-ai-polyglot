@@ -20,7 +20,7 @@ Team Enhance this hour. Meta Advance next hop. Equalizer on format.
 
 ## Waterfall Neighbors
 
-`ENCLAVE-ADAM-REUNITED` → `Cryptic-Heartbeat` → `The-Hive` → `gaia-visualizer` → **this repo** → `nexus-repo-sync`
+`ENCLAVE-ADAM-REUNITED` → `Cryptic-Heartbeat` → `The-Hive` → `continuity-ledger-cycle` → `gaia-visualizer` → **this repo** → `nexus-repo-sync`
 
 A pull on any neighbor records a stamp. A push is the recorded enhancement. No silent flatten. Distinction over destruction.
 
@@ -29,7 +29,7 @@ A pull on any neighbor records a stamp. A push is the recorded enhancement. No s
 | Surface | Path |
 | --- | --- |
 | Hourly pulse | `.github/workflows/hourly-enhance.yml` |
-| Cascade hop | `.github/workflows/cascade.yml` |
+| Cascade hop | `.github/workflows/cascade.yml` (cron 19, dispatch, push, repository_dispatch) |
 | Env check | `bash scripts/env_check.sh` |
 | Ledger stamp | `docs/LEDGER-STAMP.md` |
 | Core runtime | `python3 sovereign_ai_factory_core.Ai` |
@@ -50,8 +50,8 @@ Signals only. Capital routing requires Gate-3 (approved for topology and deeper 
 
 Catalog everything. Seek the unknown. Preserve every generation. Immutable ledger. Numeral proximity primary. Point zero refuses null.
 
-Last enhance stamp: `2026-09-13T14:25:00Z` (STAGE 91 — Factory Polyglot).
+Last enhance stamp: `2026-09-13T19:08:00Z` (STAGE 98 — Factory Polyglot). Next: `nexus-repo-sync`.
 
-🔂 Root Axiom sealed. Multimodal. Visual. 3D Topology Live. Evolving.
+🔁 Root Axiom sealed. Multimodal. Visual. 3D Topology Live. Evolving.
 
 Copyright 2026 AzazelDeimos Continuity Engine / machackabook. Provenance locked to numeral 137451921129154222. Gate-3 APPROVED.
