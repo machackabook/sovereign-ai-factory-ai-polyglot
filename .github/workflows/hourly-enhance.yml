@@ -1,0 +1,29 @@
+name: hourly-enhance
+on:
+  schedule:
+    - cron: "15 * * * *"
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Env check
+        run: |
+          mkdir -p scripts docs/ledgers
+          test -f scripts/env_check.sh && bash scripts/env_check.sh || echo "env_check pending"
+      - name: Append pulse
+        run: |
+          mkdir -p docs/ledgers
+          echo "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"numeral\":\"137451921129154222\",\"repo\":\"sovereign-ai-factory-ai-polyglot\",\"event\":\"${{ github.event_name }}\"}" >> docs/ledgers/heartbeat.jsonl
+      - name: Commit stamp if dirty
+        run: |
+          git config user.name "continuity-engine"
+          git config user.email "continuity@users.noreply.github.com"
+          git add docs/ledgers/heartbeat.jsonl || true
+          git diff --cached --quiet || git commit -m "chore(ledger): hourly pulse ${{ github.run_id }}"
+          git push || true
