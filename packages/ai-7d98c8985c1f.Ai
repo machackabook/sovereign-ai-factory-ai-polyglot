@@ -1,0 +1,109 @@
+# .Ai POLYGLOT PACKAGE
+# BEGIN_JSON_META
+{
+  "package_id": "ai-7d98c8985c1f",
+  "name": "legal-arbitrage-need-router",
+  "version": "1.0.0",
+  "numeral_lock": "137451921129154222",
+  "purpose": "legal_arbitrage_finance_distribution",
+  "copyright": "Copyright 2026 AzazelDeimos Continuity Engine / machackabook. All rights reserved. Provenance locked to numeral 137451921129154222.",
+  "ledger_digest": "b8ed256557457b761ba548f5405be24c53daeb4860f12180d222ccc7c6d1d3fe",
+  "created_at": "2026-09-13T10:25:23.916553+00:00",
+  "agents": [
+    {
+      "agent_type": "LegalArbitrageScanner",
+      "criterion": "public_edge_bps",
+      "modules": {
+        "scan": true,
+        "compliance_gate": true
+      }
+    },
+    {
+      "agent_type": "NeedBasedRouter",
+      "criterion": "need_adjusted_edge",
+      "modules": {
+        "propose": true,
+        "gate3_required": true
+      }
+    },
+    {
+      "agent_type": "RiskGuardian",
+      "criterion": "risk_consistency",
+      "modules": {
+        "gate": true
+      }
+    }
+  ],
+  "data_sources": [
+    "public_market_feeds",
+    "public_onchain_explorers",
+    "public_yield_aggregators",
+    "rss_financial_news"
+  ],
+  "risk_limits": {
+    "max_capital_at_risk": 0.0,
+    "max_drawdown": 0.05,
+    "min_edge_bps": 15.0,
+    "compliance_score_min": 0.95
+  }
+}
+# END_JSON_META
+
+"""
+# legal-arbitrage-need-router
+Version: 1.0.0
+Numeral Lock: 137451921129154222
+Purpose: legal_arbitrage_finance_distribution
+
+## Legal Notice
+Copyright 2026 AzazelDeimos Continuity Engine / machackabook. All rights reserved. Provenance locked to numeral 137451921129154222.
+
+This package produces **signals only** for legal, public arbitrage and yield opportunities.
+Capital routing to those in need requires explicit Gate-3 human approval recorded in the Continuity ledger.
+
+## Agents
+[
+  {
+    "agent_type": "LegalArbitrageScanner",
+    "criterion": "public_edge_bps",
+    "modules": {
+      "scan": true,
+      "compliance_gate": true
+    }
+  },
+  {
+    "agent_type": "NeedBasedRouter",
+    "criterion": "need_adjusted_edge",
+    "modules": {
+      "propose": true,
+      "gate3_required": true
+    }
+  },
+  {
+    "agent_type": "RiskGuardian",
+    "criterion": "risk_consistency",
+    "modules": {
+      "gate": true
+    }
+  }
+]
+
+## Data Sources (public only)
+- public_market_feeds
+- public_onchain_explorers
+- public_yield_aggregators
+- rss_financial_news
+
+"""
+
+
+# --- EXECUTABLE SECTION ---
+def run_package():
+    print("Sovereign AI Package legal-arbitrage-need-router v1.0.0")
+    print("Numeral lock: 137451921129154222")
+    print("Purpose: legal arbitrage finance signals for distribution to those in need")
+    print("Agents ready: 3")
+    return {"status": "ready", "package_id": "ai-7d98c8985c1f"}
+
+if __name__ == "__main__":
+    run_package()
