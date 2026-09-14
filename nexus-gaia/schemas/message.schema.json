@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus-gaia.local/schemas/message.schema.json",
+  "title": "NexusGaiaMessage",
+  "type": "object",
+  "required": ["message_id", "origin", "destination", "timestamp", "nonce", "capability_scope", "signature", "sync_state"],
+  "properties": {
+    "message_id": { "type": "string", "format": "uuid" },
+    "origin": { "type": "string", "minLength": 1 },
+    "destination": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "nonce": { "type": "string", "minLength": 16 },
+    "parent_message": { "type": ["string", "null"] },
+    "capability_scope": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "signature": { "type": "string", "minLength": 32 },
+    "acknowledgement": {
+      "type": "object",
+      "properties": {
+        "acked": { "type": "boolean" },
+        "acked_at": { "type": ["string", "null"] },
+        "acked_by": { "type": ["string", "null"] }
+      }
+    },
+    "sync_state": {
+      "type": "string",
+      "enum": ["DISCOVER", "AUTHENTICATE", "SYNC", "VERIFY", "ACK", "COMMIT"]
+    },
+    "payload": { "type": "object" },
+    "replay_protection": {
+      "type": "object",
+      "properties": {
+        "nonce_seen": { "type": "boolean" },
+        "window_seconds": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "additionalProperties": false
+}
