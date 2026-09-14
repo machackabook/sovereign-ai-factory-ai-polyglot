@@ -1,0 +1,107 @@
+name: factory-device-pipeline
+# Continuity Engine — Combined AI Factory + Azazel + Device Target Pipeline
+# Numeral: 137451921129154222
+
+on:
+  schedule:
+    - cron: "11,41 * * * *"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Device target hint (termux|sdcard|local|all)"
+        required: false
+        default: "all"
+  repository_dispatch:
+    types: [factory-pulse, device-sync, azazel-launch, bus-ping, gemini-message, drive-scan]
+  push:
+    paths:
+      - 'profiles/azazel/**'
+      - 'packages/**'
+      - 'bus/**'
+      - 'docs/**'
+      - 'enclaves/**'
+      - 'sovereign_ai_factory_core.Ai'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  factory-device:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure full structure
+        run: |
+          mkdir -p bus/inbox bus/outbox bus/gemini bus/grok
+          mkdir -p docs/ledgers profiles/azazel packages enclaves/light enclaves/shadow
+          mkdir -p device/termux device/sdcard device/pull
+
+      - name: Stamp factory-device pulse
+        run: |
+          TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          TARGET="${{ github.event.inputs.target || 'all' }}"
+          echo "{\"ts\":\"$TS\",\"event\":\"factory-device-pipeline\",\"numeral\":\"137451921129154222\",\"target\":\"$TARGET\",\"run\":\"${{ github.run_id }}\"}" >> docs/ledgers/factory-device.jsonl
+
+      - name: Write device pull manifest
+        run: |
+          cat > device/PULL_MANIFEST.md << 'MANIFEST'
+          # Device Pull Manifest — AI Factory + Azazel
+          Numeral: 137451921129154222
+          Target: Termux / Samsung SD / local inference instance
+
+          ## One-command device hydrate
+          ```bash
+          gh repo clone machackabook/sovereign-ai-factory-ai-polyglot
+          cd sovereign-ai-factory-ai-polyglot
+          chmod +x profiles/azazel/*.sh profiles/azazel/termux/*.sh 2>/dev/null || true
+          ./profiles/azazel/azazel_wrapper.sh
+          ```
+
+          ## Factory packages to pull
+          - sovereign_ai_factory_core.Ai
+          - packages/singularity_full_access_mesh.Ai
+          - packages/arbitrage_depths_jetson_drive_enclave.Ai
+          - packages/mesh_3d_topology.Ai
+          - profiles/azazel/
+          - bus/ + docs/ catalogs
+          - enclaves/light + enclaves/shadow
+
+          ## Auto-trigger on device
+          - Termux:Boot → boot-azazel.sh (wake-lock + wrapper)
+          - YOLO / Termux Widget → azazel_wrapper.sh
+          - Fallback: manual launch + bus ping
+          MANIFEST
+
+      - name: Process bus inbox
+        run: |
+          if ls bus/inbox/*.json 1>/dev/null 2>&1; then
+            for f in bus/inbox/*.json; do
+              base=$(basename "$f")
+              cp "$f" "bus/outbox/$base" || true
+            done
+          else
+            echo "No pending bus messages"
+          fi
+
+      - name: Refresh unity index
+        run: |
+          cat > docs/FACTORY_DEVICE_UNITY.md << 'EOF'
+          # Factory ↔ Device Unity Index
+          Numeral: 137451921129154222
+          Pipeline: factory-device-pipeline
+          Azazel profile: profiles/azazel/
+          Bus: bus/
+          Drive staging: ENCLAVE-FULL-BACKUP-137451921129154222-2026-09-14
+          Device targets: Termux / SD card / local inference
+          Auto-trigger: Termux:Boot + YOLO + wrapper
+          EOF
+
+      - name: Commit pipeline state
+        run: |
+          git config user.name "continuity-engine"
+          git config user.email "continuity@users.noreply.github.com"
+          git add bus/ docs/ledgers/ docs/FACTORY_DEVICE_UNITY.md device/ || true
+          git diff --cached --quiet || git commit -m "chore(factory-device): pulse ${{ github.run_id }}"
+          git push || true
